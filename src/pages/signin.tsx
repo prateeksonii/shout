@@ -60,11 +60,10 @@ const SignupPage: NextPage = () => {
     const res = await mutateAsync(values);
 
     if (!res.error) {
-      console.log(res);
       toast.success("Successfully signed in");
       localStorage.setItem("jid", res.token);
       queryClient.invalidateQueries(["auth.me"]);
-      // await router.replace("/app");
+      await router.replace("/app");
     } else {
       toast.error(res.error.message);
     }
@@ -126,7 +125,7 @@ const SignupPage: NextPage = () => {
                 type="submit"
                 className="mt-2 rounded bg-emerald-600 py-3 px-6 font-medium"
               >
-                Sign up
+                Sign In
               </button>
             </form>
           </div>

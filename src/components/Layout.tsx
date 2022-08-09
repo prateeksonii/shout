@@ -4,7 +4,7 @@ import { FC, ReactNode, useState } from "react";
 import { toast } from "react-toastify";
 import { BASE_URL } from "../utils/constants";
 
-const protectedRoutes: string[] = [];
+const protectedRoutes: string[] = ["/app"];
 
 const Layout: FC<{ children: ReactNode }> = ({ children }) => {
   const [loadingUser, setLoadingUser] = useState(true);
@@ -13,11 +13,20 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
   const { data: user, isLoading } = useQuery(
     ["auth.me"],
     async () => {
-      const user = await fetch(`${BASE_URL}/api/v1/auth/me`, {
+      const response = await fetch(`${BASE_URL}/api/v1/auth/me`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("jid")}`,
         },
-      }).then((res) => res.json());
+      });
+
+      if (response.status !== 200) {
+        return null;
+      }
+
+      const user = await response.json();
+
+      console.log(user, protectedRoutes.includes(router.pathname));
+
       return user ?? null;
     },
     {
