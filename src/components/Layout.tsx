@@ -14,7 +14,9 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
     ["auth.me"],
     async () => {
       const user = await fetch(`${BASE_URL}/api/v1/auth/me`, {
-        credentials: "include",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jid")}`,
+        },
       }).then((res) => res.json());
       return user ?? null;
     },
